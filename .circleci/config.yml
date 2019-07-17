@@ -1,3 +1,4 @@
+# initialize circleci with doker and database
 version: 2
 jobs:
   dependencies_and_rspec:
