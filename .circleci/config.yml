@@ -1,0 +1,76 @@
+version: 2
+jobs:
+  dependencies_and_rspec:
+    docker:
+      - image: circleci/ruby:2.5.1
+      - image: circleci/postgres:10.4-alpine
+        environment:
+          POSTGRES_USER: bohdan
+          POSTGRES_DB: search_project_test
+    working_directory: ~/search_project-backend
+    steps:
+      - checkout
+
+      - restore_cache:
+          name: Restore bundle cache
+          key: search_project-bundle-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Install bundle
+          command: bundle install --path vendor/bundle
+
+      - save_cache:
+          name: Store bundle cache
+          key: search_project-{{ checksum "Gemfile.lock" }}
+          paths:
+             - vendor/bundle
+
+      - run: bundle exec rake db:create db:schema:load
+
+      - run:
+          name: Run RSpec
+          command: bundle exec rspec
+
+  deploy:
+      machine:
+          enabled: true
+      working_directory: ~/search_project
+
+      steps:
+        - checkout
+
+        - add_ssh_keys:  # add key from CircleCI account based on fingerprint
+            fingerprints:
+                - "4c:d1:94:78:c0:c0:99:5f:8b:d4:a4:a1:22:0e:5d:e0"
+
+        - run:
+            command: |
+              if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+                git push https://heroku:$HEROKU_API_KEY@git.heroku.com/qa-search-project.git master
+                heroku run rake db:migrate --app qa-search-project
+                heroku restart --app qa-backend-lucky-trip
+              elif [ "${CIRCLE_BRANCH}" == "staging" ]; then
+                git push https://heroku:$HEROKU_API_KEY@git.heroku.com/stg-search-project.git master
+                heroku run rake db:migrate --app stg-search-project
+                heroku restart --app stg-search_project
+              elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+                git push https://heroku:$HEROKU_API_KEY@git.heroku.com/prod-search-project.git master
+                heroku run rake db:migrate --app prod-search-project
+                heroku restart --app prod-search-project
+              else
+                CIRCLECI=true
+              fi
+workflows:
+  version: 2
+  dependencies_and_rspec_and_deploy:
+    jobs:
+      - dependencies_and_rspec
+      - deploy:
+          requires:
+            - dependencies_and_rspec
+          filters:
+            branches:
+              only:
+                - qa
+                - staging
+                - master

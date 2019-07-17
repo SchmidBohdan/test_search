@@ -1,0 +1,46 @@
+<%= render "header" %>
+<%= javascript_include_tag '/js/slide.js' %>
+
+<p id="notice"><%= notice %></p
+
+<h1>Programming Languages</h1>
+<h3>Search your favorite language</h3>
+
+<div class="main_container">
+
+<div class="form_container">
+<%= form_with(url: "/programming_languages", method: "get") do %>
+  <%= text_field_tag(:language, "Ruby") %>
+  <%= select_tag(:my_type, raw('<option value="1">Name</option><option value="2">Type</option><option value="3">Designed by</option>'),
+  class: "select-wrapper fa fa-angle-down") %>
+  <%= submit_tag("Search") %>
+<% end %>
+</div>
+
+<% if @result.present? %>
+<div class="container">
+	<div class="row">
+		<div class="MultiCarousel" data-items="1,3,5,6" data-slide="1" id="MultiCarousel"  data-interval="1000">
+            <div class="MultiCarousel-inner">
+              <% @result.each do |language| %>
+                <div class="item">
+                    <div class="pad15">
+                        <p class="lead"> <%= language.values[0] %></p>
+                        <% language.each do |key, value| %>
+                          <b style="color:green"> <%= key %>   - </b>
+                          <b > <%= value  %> </b> <br>
+                        <% end %>
+                    </div>
+                </div>
+              <% end %>
+            </div>
+            <button class="btn btn-primary leftLst"><</button>
+            <button class="btn btn-primary rightLst">></button>
+        </div>
+	</div>
+</div>
+<% else %>
+<div class="sorry">
+    <h1>Sorry, but we can not find your query</h1>
+</div>
+<% end %>

@@ -1,0 +1,101 @@
+.main_container{
+  margin-top: 150px;
+}
+
+.form_container{
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.text_field{
+
+}
+
+input[type=text] {
+  width: 130px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 40px;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+
+input[type=text]:focus {
+  width: 50%;
+}
+
+.select-wrapper {
+  width: 200px;
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100px;
+}
+
+.select-wrapper::before {
+  color: #fff;
+  font-size: 20px;
+  pointer-events: none;
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8nwYAAmoBZ0eMiB8AAAAASUVORK5CYII=) repeat;
+
+  border-radius: 5px;
+  background-color: MediumSeaGreen;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  height: 49px;
+  outline: none;
+  padding-left: 10px;
+  width: 100%;
+}
+
+select option {
+  color: #666;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select:focus::-ms-value {
+
+}
+
+.value {
+  background-color: green;
+}
+
+.key {
+  color: green;
+}
+
+h1{
+
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 14px 29px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
